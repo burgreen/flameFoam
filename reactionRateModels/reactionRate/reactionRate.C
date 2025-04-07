@@ -74,11 +74,13 @@ Foam::reactionRate::reactionRate
     // model constants
     p0_(mesh_.time().value()==0 ?
         dimensionedScalar("p0", average(p_))
-        : dimensionedScalar("p0", dimPressure, coeffDict_.lookup<scalar>("p0"))),
+        : dimensionedScalar("p0", average(p_))
+        //: dimensionedScalar("p0", dimPressure, coeffDict_.lookup<scalar>("p0"))),
 
     rho0_(mesh_.time().value()==0 ?
         dimensionedScalar("rho0", average(combModel_.rho()))
-        : dimensionedScalar("rho0", dimDensity, coeffDict_.lookup<scalar>("rho0"))),
+        : dimensionedScalar("rho0", average(combModel_.rho()))
+        //: dimensionedScalar("rho0", dimDensity, coeffDict_.lookup<scalar>("rho0"))),
 
     // HEff estimation
     WH2_(dimensionedScalar("WH2", dimMass/dimMoles, 2)),

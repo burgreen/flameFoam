@@ -93,23 +93,23 @@ void Foam::wrinklingFactorModels::Charlette::correct()
 
     laminarCorrelation_->correct();
 
-    volScalarField ud_ = c2_*pow3(delta_)*mag(fvc::curl(fvc::laplacian(U_)));
+    volScalarField ud_( c2_*pow3(delta_)*mag(fvc::curl(fvc::laplacian(U_))) );
 
-    volScalarField lf_ = 4*reactionRate_.muU()/(laminarCorrelation_->burningVelocity() * reactionRate_.rhoU());
+    volScalarField lf_( 4*reactionRate_.muU()/(laminarCorrelation_->burningVelocity() * reactionRate_.rhoU()) );
 
-    volScalarField udByLBV_ = ud_/laminarCorrelation_->burningVelocity();
+    volScalarField udByLBV_( ud_/laminarCorrelation_->burningVelocity() );
 
-    volScalarField deltaBylf_ = delta_/lf_;
+    volScalarField deltaBylf_( delta_/lf_ );
 
-    volScalarField Red_ = 4*deltaBylf_*udByLBV_+SMALL;
+    volScalarField Red_( 4*deltaBylf_*udByLBV_+SMALL );
 
-    volScalarField fu_ = Ck_mult2_*Foam::pow(Ck_, 1.5)*pow(udByLBV_, 2);
-    volScalarField fd_ = pow(Ck_mult1_*Ck_*pi43_*max(0.0, pow(deltaBylf_, n43_) - 1), 0.5);
-    volScalarField fRe_ = pow(0.163636363636364*exp(-1.5*Ck_*pi43_/Red_), 0.5)*pow(Red_, 0.5);
+    volScalarField fu_( Ck_mult2_*Foam::pow(Ck_, 1.5)*pow(udByLBV_, 2) );
+    volScalarField fd_( pow(Ck_mult1_*Ck_*pi43_*max(0.0, pow(deltaBylf_, n43_) - 1), 0.5) );
+    volScalarField fRe_( pow(0.163636363636364*exp(-1.5*Ck_*pi43_/Red_), 0.5)*pow(Red_, 0.5) );
 
-    volScalarField d_ = 0.6 + 0.2*exp(-0.1*udByLBV_)-0.2*exp(-0.01*deltaBylf_);
+    volScalarField d_( 0.6 + 0.2*exp(-0.1*udByLBV_)-0.2*exp(-0.01*deltaBylf_) );
 
-    volScalarField gamma_ =
+    volScalarField gamma_(
     pow(
         pow(
             pow(
@@ -121,9 +121,9 @@ void Foam::wrinklingFactorModels::Charlette::correct()
         +
         pow(fRe_+SMALL, -1.4),
         -0.714285714285714
-    );
+    ) );
 
-    volScalarField xi_ = pow(1 + min(deltaBylf_, gamma_*udByLBV_), beta_);
+    volScalarField xi_( pow(1 + min(deltaBylf_, gamma_*udByLBV_), beta_) );
 
     sTurbulent_ = xi_*laminarCorrelation_->burningVelocity();
 
